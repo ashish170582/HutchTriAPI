@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context>
+  <!--Live Database-->
+  <Resource auth="Container" driverClassName="com.mysql.jdbc.Driver" logAbandoned="true"
+            maxIdle="20" maxTotal="50" maxWait="10000" minIdle="10"
+            name="connpool"
+            username="scroot"
+            password="Spice321"
+            removeAbandoned="true" 
+            removeAbandonedTimeout="60"
+            type="javax.sql.DataSource" 
+            url="jdbc:mysql://dbmziiki.cpersmswui52.eu-west-1.rds.amazonaws.com:3306/HutchTri"
+            validationQuery="SELECT 1"/>
+            
+</Context>
