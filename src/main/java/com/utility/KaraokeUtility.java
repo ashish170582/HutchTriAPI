@@ -10,24 +10,34 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
 
 import org.apache.commons.lang.RandomStringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.beans.Root;
 import com.beans.karaokeData;
-import com.database.MySQL;
-import com.mysql.fabric.xmlrpc.base.Array;
+
+
 @Component
 public class KaraokeUtility {
+	
+	@Autowired
+	private DataSource dataSource;
 	
 	@Value("${UPLOAD_SOLO_DIRECTORY}")
 	private String UPLOAD_SOLO_DIRECTORY;
@@ -35,6 +45,13 @@ public class KaraokeUtility {
 	private String UPLOAD_COLLAB_DIRECTORY;
 	@Value("${UPLOAD_TEMP_DIRECTORY}")
 	private String UPLOAD_TEMP_DIRECTORY;
+	
+	private boolean isSuccessUploded = false;
+	
+	private String UPLOAD_DIRECTORY = "";
+	private karaokeData karObj = null , karObj1 =null;
+	
+	private String name ="";
 	
 	public KaraokeUtility() {
 		// TODO Auto-generated constructor stub
@@ -49,7 +66,7 @@ public class KaraokeUtility {
 		String recordingMode=request.getParameter("recordingMode");
 		String singerType=request.getParameter("singerType");
 		String recordType=request.getParameter("recordType");
-		Boolean isJoin=Boolean.valueOf(request.getParameter("isJoin"));
+		boolean isJoin=Boolean.valueOf(request.getParameter("isJoin"));
 		String timstamp=request.getParameter("timestamp");
 		
 		String os=request.getParameter("os");
@@ -57,10 +74,7 @@ public class KaraokeUtility {
 		
 		System.out.println(karaokeId+resourceCode+userId+score+recordingMode+singerType+recordType+recordType+isJoin+timstamp+os);
 		
-		Boolean isSuccessUploded = false;
-		
-		String UPLOAD_DIRECTORY = "";
-		karaokeData karObj = null;
+	
 		System.out.println("recordingMode--"+recordingMode); 
 		try {
 
@@ -72,24 +86,30 @@ public class KaraokeUtility {
 			createDirector(UPLOAD_DIRECTORY);
 			createDirector(UPLOAD_TEMP_DIRECTORY);
 
-			String name = uploadFile.getName();
+			name = uploadFile.getName();
 			String ext = getExt(recordType);
 			do {
 				name = generateUniqueFileName(resourceCode, userId) + "." + ext;
 			} while (new File(UPLOAD_DIRECTORY + "/" + name).exists());
 			String filePath = UPLOAD_DIRECTORY + "/" + name;
 			System.out.println("File Path--"+filePath);
-			MySQL sql = new MySQL();
-			ResultSet rs = callProcedure(1, karaokeId, resourceCode, userId,
+		 
+			 ArrayList<Object> ar = callProcedure(1, karaokeId, resourceCode, userId,
 					score, recordingMode, singerType,
-					recordType, isJoin, filePath, timstamp, sql);
+					recordType, isJoin, filePath, timstamp);
+			 
+			 
+			   ar.forEach(item->{
+			    	  Map resultMap = (Map) item;
+			    	  karObj = new karaokeData(Integer.parseInt(resultMap.get("karaokeId").toString()), resultMap.get("resourceCode").toString(),
+			    			  resultMap.get("filePath").toString());			    	  
+			    	   isSuccessUploded = getbooleanValue(resultMap.get("isSuccessfullyUploaded").toString());
+			    	    name =   resultMap.get("fileName").toString();
+						
 
-			while (rs.next()) {
-				karObj = new karaokeData(rs.getInt("karaokeId"), rs.getString("resourceCode"),
-						rs.getString("filePath"));
-				isSuccessUploded = rs.getBoolean("isSuccessfullyUploaded");
-				name = rs.getString("fileName");
-			}
+					 });
+			   
+			   ar=null;
 
 			if (isSuccessUploded == false) {
 
@@ -98,7 +118,7 @@ public class KaraokeUtility {
 					fileAsUpload = UPLOAD_TEMP_DIRECTORY + "/" + name;
 				// This Function is Use for Uoload File
 				   uploadFile(fileAsUpload, uploadFile);
-					karaokeData karObj1 = null;
+					
 					
 					String keraokeID=karaokeId;
 					
@@ -106,43 +126,51 @@ public class KaraokeUtility {
 						keraokeID=karObj.getKaraokeId()+"";
 					}
 
-					rs = callProcedure(3, keraokeID, resourceCode, userId,
+					ar = callProcedure(3, keraokeID, resourceCode, userId,
 							score, recordingMode, singerType,
-							recordType, isJoin, filePath, timstamp, sql);
-					while (rs.next()) {
-						karObj1 = new karaokeData(rs.getInt("karaokeId"), rs.getString("resourceCode"),
-								rs.getString("filePath"));
-					}
+							recordType, isJoin, filePath, timstamp);
+					 ar.forEach(item->{
+				    	  Map resultMap = (Map) item;
+				    	  karObj1 = new karaokeData(Integer.parseInt(resultMap.get("karaokeId").toString()), resultMap.get("resourceCode").toString(),
+				    			  resultMap.get("filePath").toString());	
+
+						 });
 					
+					 ar =null;
+					 
 					System.out.println("VAlues---"+karObj1.toString());
 
 					// Going To merge file after Join ...
-					final String mergerFile=karObj1.getUrl() + "";
-					
+					final String mergerFile=karObj1.getUrl() + "";					
 					
 						new Thread() {
 							
 							public void run() {
 								//For copy temp location to actual location
-								if(os.equalsIgnoreCase("ios") && isJoin.equals(false) ) {
+								if(os.equalsIgnoreCase("ios") && isJoin==false ) {
 									copyFileUsingStream(mergerFile, fileAsUpload, filePath,karaokeId, resourceCode, userId,
 											score, recordingMode, singerType,
-											recordType, isJoin, filePath, timstamp, sql);									
+											recordType, isJoin, filePath, timstamp);									
 								}else {
 									//For Merging File temp location to actual location
 									mergeFile(mergerFile, fileAsUpload, filePath,karaokeId, resourceCode, userId,
 											score, recordingMode, singerType,
-											recordType, isJoin, filePath, timstamp, sql);
+											recordType, isJoin, filePath, timstamp);
 								}
 							}
 						}.start();
 						
 						
-				rs = callProcedure(2, karaokeId, resourceCode, userId,
+				ar = callProcedure(2, karaokeId, resourceCode, userId,
 						score, recordingMode, singerType,
-						recordType, isJoin, filePath, timstamp, sql);
-				while (rs.next())
-					isSuccessUploded = rs.getBoolean("isSuccessfullyUploaded");
+						recordType, isJoin, filePath, timstamp);				
+				 ar.forEach(item->{
+			    	  Map resultMap = (Map) item;			    	  
+			    	  isSuccessUploded = getbooleanValue(resultMap.get("isSuccessfullyUploaded").toString());
+
+					 });
+				
+			
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -169,7 +197,7 @@ public class KaraokeUtility {
 	public void mergeFile(String IN_USER_DIRECTORY1, String IN_USER_DIRECTORY2, String OUT_DIRECTORY,
 			String karaokeId,String  resourceCode,String  userId,
 			String  score,String  recordingMode,String  singerType,
-			String  recordType,Boolean  isJoin,String  filePath,String  timstamp,MySQL   sql) {
+			String  recordType,boolean  isJoin,String  filePath,String  timstamp ) {
 		
 		System.out.println("Going to Merge--"+IN_USER_DIRECTORY1);
 		System.out.println("Going to Merge--"+IN_USER_DIRECTORY2);
@@ -189,7 +217,7 @@ public class KaraokeUtility {
 			
 			runMergeCommand(cmd,karaokeId, resourceCode, userId,
 					score, recordingMode, singerType,
-					recordType, isJoin, filePath, timstamp, sql);
+					recordType, isJoin, filePath, timstamp);
 		}
 		else {
 			String[] cmd={"/usr/local/bin/ffmpeg",
@@ -199,7 +227,7 @@ public class KaraokeUtility {
 			        OUT_DIRECTORY};
 				runMergeCommand(cmd,karaokeId, resourceCode, userId,
 						score, recordingMode, singerType,
-						recordType, isJoin, filePath, timstamp, sql);
+						recordType, isJoin, filePath, timstamp);
 			
 /*				try {
 					Runtime.getRuntime().exec(cmd);
@@ -216,37 +244,63 @@ public class KaraokeUtility {
 
 	public void runMergeCommand(String[] cmd,String karaokeId,String  resourceCode,String  userId,
 			String  score,String  recordingMode,String  singerType,
-			String  recordType,Boolean  isJoin,String  filePath,String  timstamp,MySQL   sql) {
+			String  recordType,boolean  isJoin,String  filePath,String  timstamp ) {
 		
 		System.out.println("Run Command ---"+Arrays.toString(cmd));
 		        	try {
 		      		Runtime.getRuntime().exec(cmd);
 		      		callProcedure(4, karaokeId, resourceCode, userId,
 							score, recordingMode, singerType,
-							recordType, isJoin, filePath, timstamp, sql);
-		      		sql.close();
+							recordType, isJoin, filePath, timstamp);
+		      		
 				} catch (Exception e) {
 					System.out.println("Exception is Here---" + e);
-					sql.close();
+					
 				}
 			
 	}
 	
 	
 	@SuppressWarnings("finally")
-	public ResultSet callProcedure(int flag, String karaokeId, String resourceCode, String userId, String score,
-			String recordingMode, String singerType, String recordType, Boolean isJoin, String filePath,
-			String timstamp, MySQL sql) {
+	public  ArrayList<Object> callProcedure(int flag, String karaokeId, String resourceCode, String userId, String score,
+			String recordingMode, String singerType, String recordType, boolean isJoin, String filePath,
+			String timstamp) {
 
-		ResultSet rs = null;
+		 ArrayList<Object> ar = null;
 		try {
-			rs = sql.prepareCall("call UserKaraoke(" + flag + ",'" + karaokeId + "','" + resourceCode + "','" + userId
-					+ "','" + score + "','" + recordingMode + "','" + singerType + "','" + recordType + "'," + isJoin
-					+ ",'" + filePath + "','" + timstamp + "')");
+			int in_isJoin=0;
+			if (isJoin==true) {
+				in_isJoin=1;
+			} 
+			SimpleJdbcCall jdbcCall = new   SimpleJdbcCall(dataSource).withProcedureName("UserKaraoke");			  			  
+			    SqlParameterSource inParams = new MapSqlParameterSource()
+					.addValue("in_Flag", flag )
+					.addValue("in_karaoke_id",  karaokeId )
+					.addValue("in_resourceCode", resourceCode)
+					.addValue("in_userId", userId)					
+					.addValue("in_score", score)
+					.addValue("in_recording_mode", recordingMode)
+			        .addValue("in_singerType", singerType)			        
+			        .addValue("in_recordType", recordType)			        
+			        .addValue("in_isJoin", in_isJoin)
+			        .addValue("in_File_Path", filePath)
+			        .addValue("in_timestamp", timstamp)			        
+			        ;			    
+			    
+			    Map<String, Object> rs = jdbcCall.execute(inParams);	
+			    System.out.println("rs data is ::: " + rs);
+			     ar = new ArrayList<Object>();
+			    ar = (ArrayList) rs.get("#result-set-1");
+			    System.out.println("ar data is ::: " + ar);
+			
+//			rs = sql.prepareCall("call UserKaraoke(" + flag + ",'" + karaokeId + "','" + resourceCode + "','" + userId
+//					+ "','" + score + "','" + recordingMode + "','" + singerType + "','" + recordType + "'," + isJoin
+//					+ ",'" + filePath + "','" + timstamp + "')");
 		} catch (Exception e) {
+			 e.printStackTrace();
 			System.out.println("Exception in calling UserKaraoke---");
 		} finally {
-			return rs;
+			return ar;
 		}
 	}
 
@@ -293,7 +347,7 @@ public class KaraokeUtility {
 	 public void copyFileUsingStream(String IN_USER_DIRECTORY1, String IN_USER_DIRECTORY2, String OUT_DIRECTORY,
 				String karaokeId,String  resourceCode,String  userId,
 				String  score,String  recordingMode,String  singerType,
-				String  recordType,Boolean  isJoin,String  filePath,String  timstamp,MySQL   sql) {
+				String  recordType,boolean  isJoin,String  filePath,String  timstamp) {
 	        InputStream is = null;
 	        OutputStream os = null;
 	        System.out.println("Start Copy ----"+OUT_DIRECTORY);
@@ -307,8 +361,8 @@ public class KaraokeUtility {
             }
 	      	callProcedure(4, karaokeId, resourceCode, userId,
 						score, recordingMode, singerType,
-						recordType, isJoin, filePath, timstamp, sql);
-	      		sql.close();
+						recordType, isJoin, filePath, timstamp);
+	      		
 			} catch (Exception e) {
 				System.out.println("Exception is Here---" + e);
 				
@@ -317,11 +371,22 @@ public class KaraokeUtility {
 	            try {
 	                is.close();
 	                os.close();
-	            	sql.close();
+	            	
 	            } catch (Exception ex) {
 	            }
 	        }	
      	System.out.println("End Copy ---"+OUT_DIRECTORY);
 	 }
+	 
+	 private boolean getbooleanValue(String p_Value) {
+			boolean bValue = false;
+
+			if (p_Value.equals("1") || p_Value.toLowerCase().equals("true")) {
+				bValue = true;
+			} 
+
+			return bValue;
+		}
+
 	
 }

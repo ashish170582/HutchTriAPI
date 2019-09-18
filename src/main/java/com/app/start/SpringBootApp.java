@@ -6,18 +6,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
+
 import org.springframework.scheduling.annotation.EnableAsync;
 
-import com.database.DBConfiguration;
+
 //import org.springframework.jdbc.datasource.DriverManagerDataSource;
 @Configuration
 @SpringBootApplication
@@ -25,9 +23,7 @@ import com.database.DBConfiguration;
 @ComponentScan(basePackages="com")
 public class SpringBootApp extends SpringBootServletInitializer  {
 	
-	@Autowired
-	DBConfiguration dbConfig;
-	
+	 
 	public static void main(String[] args) {
 		SpringApplication.run(SpringBootApp.class, args);
 	}
@@ -51,21 +47,5 @@ public class SpringBootApp extends SpringBootServletInitializer  {
 	    return messageSource;
 	}
 	
-	
-/*	@Bean(name = "dataSource")
-	@ConfigurationProperties(prefix = "spring.datasource")
-	 public DataSource  dataSource() {
-		System.out.println("DataSource Connected----Going to Connect");
-	 DriverManagerDataSource driverManagerDataSource = new DriverManagerDataSource();
-	 driverManagerDataSource.setDriverClassName(dbConfig.getDriverClassName());
-	 driverManagerDataSource.setUrl(dbConfig.getUrl());
-	 driverManagerDataSource.setUsername(dbConfig.getUsername());
-	 driverManagerDataSource.setPassword(dbConfig.getPassword());
-	 driverManagerDataSource.
-	 return driverManagerDataSource;
-		System.out.println("-----------------------------------------------------");
-		return DataSourceBuilder
-                .create()
-                .build();
-	 }*/
+	 
 }

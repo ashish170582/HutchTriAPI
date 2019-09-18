@@ -1,63 +1,76 @@
+/*    */ package beans.config;
+
+/*    */
+/*    */ public class AudioQualityConfiguration
+/*    */ {
+	/*    */ private String ssDomainName;
+	/*    */ private AudioQuality auto;
+	/*    */ private AudioQuality high;
+	/*    */ private AudioQuality medium;
+	/*    */ private AudioQuality low;
+
+	/*    */
+	/*    */ public AudioQualityConfiguration(AudioQuality auto, AudioQuality high, AudioQuality medium,
+			AudioQuality low)
+	/*    */ {
+		/* 17 */ this.auto = auto;
+		/* 18 */ this.high = high;
+		/* 19 */ this.medium = medium;
+		/* 20 */ this.low = low;
+		/*    */ }
+
+	/*    */
+	/*    */ public String getSsDomainName() {
+		/* 24 */ return this.ssDomainName;
+		/*    */ }
+
+	/*    */
+	/*    */ public void setSsDomainName(String ssDomainName) {
+		/* 28 */ this.ssDomainName = ssDomainName;
+		/*    */ }
+
+	/*    */
+	/*    */ public AudioQuality getAuto() {
+		/* 32 */ return this.auto;
+		/*    */ }
+
+	/*    */
+	/*    */ public void setAuto(AudioQuality auto) {
+		/* 36 */ this.auto = auto;
+		/*    */ }
+
+	/*    */
+	/*    */ public AudioQuality getHigh() {
+		/* 40 */ return this.high;
+		/*    */ }
+
+	/*    */
+	/*    */ public void setHigh(AudioQuality high) {
+		/* 44 */ this.high = high;
+		/*    */ }
+
+	/*    */
+	/*    */ public AudioQuality getMedium() {
+		/* 48 */ return this.medium;
+		/*    */ }
+
+	/*    */
+	/*    */ public void setMedium(AudioQuality medium) {
+		/* 52 */ this.medium = medium;
+		/*    */ }
+
+	/*    */
+	/*    */ public AudioQuality getLow() {
+		/* 56 */ return this.low;
+		/*    */ }
+
+	/*    */
+	/*    */ public void setLow(AudioQuality low) {
+		/* 60 */ this.low = low;
+		/*    */ }
+	/*    */ }
+
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Location: C:\Users\DigiSpice\Desktop\WEB-INF\classes\ Qualified Name:
+ * beans.config.AudioQualityConfiguration JD-Core Version: 0.6.0
  */
-
-package beans.config;
-
-public class AudioQualityConfiguration {
-	private String ssDomainName; // "vgabr.scontentzone.com";(Voda_GHANA)
-	private AudioQuality auto;
-	private AudioQuality high;
-	private AudioQuality medium;
-	private AudioQuality low;
-
-	public AudioQualityConfiguration(AudioQuality auto, AudioQuality high, AudioQuality medium, AudioQuality low) {
-		this.auto = auto;
-		this.high = high;
-		this.medium = medium;
-		this.low = low;
-	}
-
-	public String getSsDomainName() {
-		return ssDomainName;
-	}
-
-	public void setSsDomainName(String ssDomainName) {
-		this.ssDomainName = ssDomainName;
-	}
-
-	public AudioQuality getAuto() {
-		return auto;
-	}
-
-	public void setAuto(AudioQuality auto) {
-		this.auto = auto;
-	}
-
-	public AudioQuality getHigh() {
-		return high;
-	}
-
-	public void setHigh(AudioQuality high) {
-		this.high = high;
-	}
-
-	public AudioQuality getMedium() {
-		return medium;
-	}
-
-	public void setMedium(AudioQuality medium) {
-		this.medium = medium;
-	}
-
-	public AudioQuality getLow() {
-		return low;
-	}
-
-	public void setLow(AudioQuality low) {
-		this.low = low;
-	}
-
-}

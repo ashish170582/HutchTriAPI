@@ -11,7 +11,6 @@ import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
-import beans.config.AESEncriptionDecription;
 
 public class RequestWrapper extends HttpServletRequestWrapper {
     private final String body;

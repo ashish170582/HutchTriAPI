@@ -243,4 +243,17 @@ public class UserInfoData {
 		this.popUpAction = popUpAction;
 	}
 
+	@Override
+	public String toString() {
+		return "UserInfoData [userid=" + userid + ", name=" + name + ", msisdn=" + msisdn + ", email=" + email
+				+ ", gender=" + gender + ", password=" + password + ", image=" + image + ", userTypeId=" + userTypeId
+				+ ", userStatus=" + userStatus + ", actionId=" + actionId + ", registered=" + registered
+				+ ", mobileNumberVerification=" + mobileNumberVerification + ", playCounter=" + playCounter
+				+ ", billingMobileNumber=" + billingMobileNumber + ", dialingCode=" + dialingCode
+				+ ", mobileNumberLength=" + mobileNumberLength + ", promotionCode=" + promotionCode + ", popUpMsg="
+				+ popUpMsg + ", popUpAction=" + popUpAction + ", subscribedPackage=" + subscribedPackage + "]";
+	}
+
+	
+	
 }

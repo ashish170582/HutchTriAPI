@@ -55,6 +55,7 @@ private  List list = null;
              obj4 = (Configuration) dbProcedures.getApplicationConfiguration(reqParam);                            
              obj7 = (AudioQualityConfiguration) dbProcedures.getAudioQualityConfiguration(reqParam);
              list = (List<PaymentMethod>) dbProcedures.getPaymentMethods(reqParam);
+           //  System.out.println("obj1 ::" + obj1  + "obj2 ::" + obj2 + "obj3 ::"+ obj3 + "obj4"+ obj4 +"obj7 : "+ obj7 + "list :: "+ list);
              if (list.isEmpty()) {
                  obj = new Root(271, messageSource.getMessage("271", null,new Locale(reqParam.getLanguageCode())));
              } else {
@@ -94,8 +95,14 @@ private  List list = null;
 	}
 	@Override
 	public RootResponse applicationInstallViaShareClickTracking(RequestParameter reqParam) {
-		int resultCode = dbProcedures.appInstallViaShareClickTraking(reqParam);
-		obj = new Root(resultCode, messageSource.getMessage(String.valueOf(resultCode), null,new Locale(reqParam.getLanguageCode())));
+		int resultCode = 0;
+		try {
+			resultCode = dbProcedures.appInstallViaShareClickTraking(reqParam);
+			obj = new Root(resultCode, messageSource.getMessage(String.valueOf(resultCode), null,new Locale(reqParam.getLanguageCode())));
+		} catch (Exception e) {
+			// TODO: handle exception
+		}		 
+	
 		return new RootResponse(obj);
 	}	
 	

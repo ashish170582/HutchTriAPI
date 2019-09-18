@@ -120,4 +120,14 @@ public class SubscribedPackage {
         this.iosToken = iosToken;
     }
 
+	@Override
+	public String toString() {
+		return "SubscribedPackage [packageId=" + packageId + ", packageName=" + packageName + ", packagePrice="
+				+ packagePrice + ", packageValidityPeriod=" + packageValidityPeriod + ", packageStartDate="
+				+ packageStartDate + ", packageEndDate=" + packageEndDate + ", androidToken=" + androidToken
+				+ ", iosToken=" + iosToken + ", optScreenVisibility=" + optScreenVisibility + "]";
+	}
+    
+    
+
 }

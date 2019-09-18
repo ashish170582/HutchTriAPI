@@ -5,7 +5,7 @@
  */
 package com.app.beans;
 
-import com.database.MySQL;
+
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
@@ -84,21 +84,21 @@ public class FeaturedPlaylist {
         this.images = images;
     }
 
-    @SuppressWarnings("finally")
-	public static List<FeaturedPlaylist> getTopPlaylist(int countryId, int imageTechRefId) {
-        List<FeaturedPlaylist> lst = new ArrayList<FeaturedPlaylist>();
-        try {
-            MySQL mysql = new MySQL();
-            ResultSet rs = mysql.prepareCall("{CALL `Mziiki_Content`.`GetFeaturedPlaylistMetaData`(1," + countryId + ",1,0,'iPhone OS','OSV','DeviceModel','DeviceId()','getDevicePin',0,0," + imageTechRefId + ",0,10)}");
-            while (rs.next()) {
-                lst.add(new FeaturedPlaylist(rs.getInt("playlist_id"), rs.getString("playlist_name"), rs.getString("playlist_desc"), rs.getString("image_url"),rs.getInt("track_count")));
-            }
-            mysql.close();
-        } catch (Exception e) {
-            System.out.println("Exception in Mziiki FeaturedPlaylist.getTopPlaylist(int countryId,int imageTechRefId) - " + e.getMessage());
-        } finally {
-            return lst;
-        }
-    }
+//    @SuppressWarnings("finally")
+//	public static List<FeaturedPlaylist> getTopPlaylist(int countryId, int imageTechRefId) {
+//        List<FeaturedPlaylist> lst = new ArrayList<FeaturedPlaylist>();
+//        try {
+//            MySQL mysql = new MySQL();
+//            ResultSet rs = mysql.prepareCall("{CALL `Mziiki_Content`.`GetFeaturedPlaylistMetaData`(1," + countryId + ",1,0,'iPhone OS','OSV','DeviceModel','DeviceId()','getDevicePin',0,0," + imageTechRefId + ",0,10)}");
+//            while (rs.next()) {
+//                lst.add(new FeaturedPlaylist(rs.getInt("playlist_id"), rs.getString("playlist_name"), rs.getString("playlist_desc"), rs.getString("image_url"),rs.getInt("track_count")));
+//            }
+//            mysql.close();
+//        } catch (Exception e) {
+//            System.out.println("Exception in Mziiki FeaturedPlaylist.getTopPlaylist(int countryId,int imageTechRefId) - " + e.getMessage());
+//        } finally {
+//            return lst;
+//        }
+//    }
 
 }

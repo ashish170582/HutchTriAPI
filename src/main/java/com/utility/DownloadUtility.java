@@ -5,7 +5,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Locale;
@@ -15,23 +15,32 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import com.beans.Root;
-import com.database.MySQL;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import beans.config.AESEncriptionDecription;
 
 @Component
 public class DownloadUtility {
 
-	
+
+	@Autowired
+	private DataSource dataSource;
 	@Autowired
 	private MessageSource messageSource;
-	
+    private String TrackTitle = "";
+    private String  TrackFile = "";
+    private int code=0;
 	public void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
@@ -51,10 +60,10 @@ public class DownloadUtility {
                     System.out.println("Value-"+value);*/
                 }
             }
-            String TrackTitle = "", TrackFile = "";
-            int code=0;
+       
             try {
-                MySQL mysql = new MySQL();
+            //   MySQL1 mysql = new MySQL1();
+            	
                 int techRefID;
                 String  quality =  map.get("dwldquality");
                 if(quality==null){
@@ -74,24 +83,65 @@ public class DownloadUtility {
                         techRefID=5;
                         
                 }
-                ResultSet rs = mysql.prepareCall("{CALL `GetTrackInfo`(" + (String) map.get("ocid") + ",'" + (String) map.get("trackid") + "', "+techRefID+"  ,126)}");
-                if (rs != null) {
-                    while (rs.next()) {
-                        TrackTitle = rs.getString("resource_title");
-                        TrackFile = rs.getString("filePath");
-                    }
-                }
-                rs = mysql.prepareCall("{CALL `UserOfflineValidate`(1," + (String) map.get("ocid") + ",'" + (String) map.get("os") + "','" + (String) map.get("devid") +
-                		"','" + (String) map.get("userid") + "','" + (String) map.get("trackid") + "', "+techRefID+"  ,126,'" + (String) map.get("token") + "')}");
-               
-                if (rs != null) {
-                    while (rs.next()) {
-                    		code=rs.getInt("code");
-                    }
-                }
+                
+            	SimpleJdbcCall jdbcCall = new   SimpleJdbcCall(dataSource).withProcedureName("GetTrackInfo");			  			  
+  			    SqlParameterSource inParams = new MapSqlParameterSource()
+  										.addValue("inCountryId", (String) map.get("ocid"))
+  					.addValue("inResourceCode",  (String) map.get("trackid"))
+  					.addValue("inAudioTechRefId", techRefID)
+  					.addValue("inImageTechRefId", 126);
+  			        Map<String, Object> rs = jdbcCall.execute(inParams);								      
+				    ArrayList<Object> ar = new ArrayList<Object>();
+				  ar = (ArrayList) rs.get("#result-set-1");
+			      ar.forEach(item->{
+		    	  Map resultMap = (Map) item;  			  
+		    	  TrackTitle= resultMap.get("resource_title").toString();
+		    	  TrackFile= resultMap.get("filePath").toString();
+				 });
+                
+                
+//                ResultSet rs = mysql.prepareCall("{CALL `GetTrackInfo`(" + (String) map.get("ocid") + ",'" + (String) map.get("trackid") + "', "+techRefID+"  ,126)}");
+//                if (rs != null) {
+//                    while (rs.next()) {
+//                        TrackTitle = rs.getString("resource_title");
+//                        TrackFile = rs.getString("filePath");
+//                    }
+//                }
+			    
+			      
+			      
+			  	 jdbcCall = new   SimpleJdbcCall(dataSource).withProcedureName("UserOfflineValidate");			  			  
+  			     inParams = new MapSqlParameterSource()
+  					.addValue("inflag",1)
+  					.addValue("inocid",  (String) map.get("ocid"))
+  					.addValue("inos", (String) map.get("os"))
+  					.addValue("indevid", (String) map.get("devid"))
+  					.addValue("inuserid", (String) map.get("userid"))
+  					.addValue("intrackid", (String) map.get("trackid"))
+  					.addValue("intechrefid", techRefID)
+  					.addValue("inaudioid", 126)
+  					.addValue("intoken",  (String) map.get("token"))
+  					;
+  			         rs = jdbcCall.execute(inParams);								      
+				    ar = new ArrayList<Object>();
+				  ar = (ArrayList) rs.get("#result-set-1");
+			      ar.forEach(item->{
+		    	  Map resultMap = (Map) item;  			  
+		    	  code=Integer.parseInt( resultMap.get("code").toString());
+		    	  
+				 });
+			      
+//                rs = mysql.prepareCall("{CALL `UserOfflineValidate`(1," + (String) map.get("ocid") + ",'" + (String) map.get("os") + "','" + (String) map.get("devid") +
+//                		"','" + (String) map.get("userid") + "','" + (String) map.get("trackid") + "', "+techRefID+"  ,126,'" + (String) map.get("token") + "')}");
+//               
+//                if (rs != null) {
+//                    while (rs.next()) {
+//                    		code=rs.getInt("code");
+//                    }
+//                }
 
                 System.out.println("REsponse code--"+code);
-                mysql.close();
+            //    mysql.close();
             } catch (Exception e) {
                 System.out.println("Exception in DownloadTrackServlet.processRequest(HttpServletRequest request, HttpServletResponse response) Internal - " + e.getMessage());
             }
@@ -100,10 +150,29 @@ public class DownloadUtility {
 			if(code==1)
             	downloadaresponse=this.fileDownloading(request, response, TrackTitle, TrackFile);
             	if(downloadaresponse==1){
-            		MySQL mysql=new MySQL();
-                     mysql.prepareCall("{CALL `UserOfflineValidate`(2," + (String) map.get("ocid") + ",'" + (String) map.get("os") + "','" + (String) map.get("devid") +
-                    		"','" + (String) map.get("userid") + "','" + (String) map.get("trackid") + "', "+64+"  ,126,'" + (String) map.get("token") + "')}");
-                     mysql.close();
+            		
+            		   
+            		SimpleJdbcCall  jdbcCall = new   SimpleJdbcCall(dataSource).withProcedureName("UserOfflineValidate");			  			  
+            		SqlParameterSource  inParams = new MapSqlParameterSource()
+     					.addValue("inflag",2)
+     					.addValue("inocid",  (String) map.get("ocid"))
+     					.addValue("inos", (String) map.get("os"))
+     					.addValue("indevid", (String) map.get("devid"))
+     					.addValue("inuserid", (String) map.get("userid"))
+     					.addValue("intrackid", (String) map.get("trackid"))
+     					.addValue("intechrefid", 64)
+     					.addValue("inaudioid", 126)
+     					.addValue("intoken",  (String) map.get("token"))
+     					;
+            		  Map<String, Object>     rs = jdbcCall.execute(inParams);								      
+            		  
+   		    	  
+            		
+            		
+//            		MySQL1 mysql=new MySQL1();
+//                     mysql.prepareCall("{CALL `UserOfflineValidate`(2," + (String) map.get("ocid") + ",'" + (String) map.get("os") + "','" + (String) map.get("devid") +
+//                    		"','" + (String) map.get("userid") + "','" + (String) map.get("trackid") + "', "+64+"  ,126,'" + (String) map.get("token") + "')}");
+//                     mysql.close();
             	}
             
             else{
@@ -162,7 +231,8 @@ public class DownloadUtility {
             result = mapper.writeValueAsString(object);
             return result;
         } catch (Exception e) {
-            System.out.println("Exception in Glo Nigeria MainServlet.toJson(Object object) - " + e.getMessage());
+        	e.printStackTrace();
+            
         }
         return null;
     }

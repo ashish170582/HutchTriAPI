@@ -8,7 +8,7 @@ import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import beans.config.AESEncriptionDecription;
+
 
 @ControllerAdvice
 public class ActionResponseLoggerAspect implements ResponseBodyAdvice<Object> {
@@ -21,7 +21,7 @@ public class ActionResponseLoggerAspect implements ResponseBodyAdvice<Object> {
 			//System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(body));
 			 // System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(body));
 			  //String normalView = mapper.writerWithView(Object.class).writeValueAsString(body);
-			  System.out.println("API Response--"+mapper.writerWithView(Object.class).writeValueAsString(body));
+			//  System.out.println("API Response--"+mapper.writerWithView(Object.class).writeValueAsString(body));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

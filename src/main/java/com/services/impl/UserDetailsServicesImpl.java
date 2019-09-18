@@ -138,7 +138,7 @@ public class UserDetailsServicesImpl implements UserDetailsServices {
 	public RootResponse uploadUserImage(HttpServletRequest request,HttpServletResponse respnse,MultipartFile file) {
 		String lang=request.getParameter("lang");
         try {
-            String filePath = userProfilePath + request.getParameter("userid") + "_0.jpg";
+            String filePath = userProfilePath + request.getParameter("userid") +".jpg";
             System.out.println("Profile Pictures path-->>> "+ filePath);
             boolean uploadError = true;
             try {

@@ -1,74 +1,76 @@
-package com.database;
+/*    */ package com.database;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Configuration;
-@Configuration
-public class DBConfiguration {
-	@Value("${spring.datasource.driver}")
-	private String driverClassName;
+/*    */
+/*    */ import org.springframework.beans.factory.annotation.Value;
+/*    */ import org.springframework.context.annotation.Configuration;
 
-	@Value("${spring.datasource.url}")
-	private String url;
+/*    */
+/*    */ @Configuration
+/*    */ public class DBConfiguration
+/*    */ {
+	/*    */
+	/*    */ @Value("${spring.datasource.driver-class-name}")
+	/*    */ private String driverClassName;
+	/*    */
+	/*    */ @Value("${spring.datasource.url}")
+	/*    */ private String url;
+	/*    */
+	/*    */ @Value("${spring.datasource.username}")
+	/*    */ private String username;
+	/*    */
+	/*    */ @Value("${spring.datasource.password}")
+	/*    */ private String password;
 
-	@Value("${spring.datasource.username}")
-	private String username;
+	/*    */
+	/*    */ public String getDriverClassName()
+	/*    */ {
+		/* 37 */ return this.driverClassName;
+		/*    */ }
 
-	@Value("${spring.datasource.password}")
-	private String password;
+	/*    */
+	/*    */ public void setDriverClassName(String driverClassName) {
+		/* 41 */ this.driverClassName = driverClassName;
+		/*    */ }
 
-/*	@Value("${maxActive}")
-	private int maxActive = 30;
+	/*    */
+	/*    */ public String getUrl() {
+		/* 45 */ return this.url;
+		/*    */ }
 
-	@Value("${maxIdle}")
-	private int maxIdle = 8;
+	/*    */
+	/*    */ public void setUrl(String url) {
+		/* 49 */ this.url = url;
+		/*    */ }
 
-	@Value("${minIdle}")
-	private int minIdle = 8;
+	/*    */
+	/*    */ public String getUsername() {
+		/* 53 */ return this.username;
+		/*    */ }
 
-	@Value("${initialSize}")
-	private int initialSize = 10;*/
-	
-	
-	public DBConfiguration() {
-		// TODO Auto-generated constructor stub
-	}
+	/*    */
+	/*    */ public void setUsername(String username) {
+		/* 57 */ this.username = username;
+		/*    */ }
 
-	public String getDriverClassName() {
-		return driverClassName;
-	}
+	/*    */
+	/*    */ public String getPassword() {
+		/* 61 */ return this.password;
+		/*    */ }
 
-	public void setDriverClassName(String driverClassName) {
-		this.driverClassName = driverClassName;
-	}
+	/*    */
+	/*    */ public void setPassword(String password) {
+		/* 65 */ this.password = password;
+		/*    */ }
 
-	public String getUrl() {
-		return url;
-	}
+	/*    */
+	/*    */ public String toString()
+	/*    */ {
+		/* 70 */ return "DBConfiguration [driverClassName=" + this.driverClassName + ", url=" + this.url + ", username="
+				+ this.username + ", password=" + this.password + "]";
+		/*    */ }
+	/*    */ }
 
-	public void setUrl(String url) {
-		this.url = url;
-	}
-
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	@Override
-	public String toString() {
-		return "DBConfiguration [driverClassName=" + driverClassName + ", url=" + url + ", username=" + username
-				+ ", password=" + password + "]";
-	}
-	
-}
+/*
+ * Location: C:\Users\DigiSpice\Desktop\WEB-INF\classes\ Qualified Name:
+ * com.database.DBConfiguration JD-Core Version: 0.6.0
+ */

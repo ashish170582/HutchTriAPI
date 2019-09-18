@@ -5,7 +5,7 @@
  */
 package com.app.beans;
 
-import com.database.MySQL;
+
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
@@ -60,20 +60,20 @@ public class Genre {
         this.images = images;
     }
 
-    @SuppressWarnings("finally")
-	protected static List<Genre> getTopGenre(int countryId, int imageTechRefId) {
-        List<Genre> lst = new ArrayList<Genre>();
-        try {
-            MySQL mysql = new MySQL();
-            ResultSet rs = mysql.prepareCall("{CALL `Mziiki_Content`.`GetGenreMetaData`(1," + countryId + ",1,0,'iPhone OS','OperatingSystemVersion','DeviceModel','DeviceId()','DevicePin',0,0,0," + imageTechRefId + ",0,10)}");
-            while (rs.next()) {
-                lst.add(new Genre(rs.getInt("genre_id"), rs.getString("genre_name"), rs.getString("image_url")));
-            }
-            mysql.close();
-        } catch (Exception e) {
-            System.out.println("Exception in Mziiki Genre.getTopGenre(int countryId, int imageTechRefId) - " + e.getMessage());
-        } finally {
-            return lst;
-        }
-    }
+//    @SuppressWarnings("finally")
+//	protected static List<Genre> getTopGenre(int countryId, int imageTechRefId) {
+//        List<Genre> lst = new ArrayList<Genre>();
+//        try {
+//            MySQL mysql = new MySQL();
+//            ResultSet rs = mysql.prepareCall("{CALL `Mziiki_Content`.`GetGenreMetaData`(1," + countryId + ",1,0,'iPhone OS','OperatingSystemVersion','DeviceModel','DeviceId()','DevicePin',0,0,0," + imageTechRefId + ",0,10)}");
+//            while (rs.next()) {
+//                lst.add(new Genre(rs.getInt("genre_id"), rs.getString("genre_name"), rs.getString("image_url")));
+//            }
+//            mysql.close();
+//        } catch (Exception e) {
+//            System.out.println("Exception in Mziiki Genre.getTopGenre(int countryId, int imageTechRefId) - " + e.getMessage());
+//        } finally {
+//            return lst;
+//        }
+//    }
 }

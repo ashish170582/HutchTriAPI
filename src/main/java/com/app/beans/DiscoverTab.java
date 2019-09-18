@@ -71,15 +71,15 @@ public class DiscoverTab extends Root {
         this.radio = radio;
     }
 
-    public static DiscoverTab getDiscoverTabData(int countryId,int imageTechRefId){
-        DiscoverTab tab=new DiscoverTab();
-        tab.setAlbum(Album.getTopAlbum(countryId, imageTechRefId));
-        tab.setArtist(Artist.getTopArtist(countryId, imageTechRefId));
-        tab.setPlaylist(FeaturedPlaylist.getTopPlaylist(countryId, imageTechRefId));
-        tab.setGenre(Genre.getTopGenre(countryId, imageTechRefId));
-        tab.setRadio(RadioBean.getTopRadio(countryId, imageTechRefId));        
-        return tab;
-    }
+//    public static DiscoverTab getDiscoverTabData(int countryId,int imageTechRefId){
+//        DiscoverTab tab=new DiscoverTab();
+//        tab.setAlbum(Album.getTopAlbum(countryId, imageTechRefId));
+//        tab.setArtist(Artist.getTopArtist(countryId, imageTechRefId));
+//        tab.setPlaylist(FeaturedPlaylist.getTopPlaylist(countryId, imageTechRefId));
+//        tab.setGenre(Genre.getTopGenre(countryId, imageTechRefId));
+//        tab.setRadio(RadioBean.getTopRadio(countryId, imageTechRefId));        
+//        return tab;
+//    }
     
 
 }

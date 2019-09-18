@@ -647,7 +647,7 @@ public class RequestParameter {
 	public void setMsisdn(String msisdn) {
 		try {
 			if (msisdn == null) {
-				this.msisdn = "";
+				this.msisdn = "NA";
 			} else {
 				this.msisdn = msisdn;
 			}

@@ -71,7 +71,7 @@ public class KaraokeServiceImpl implements KaraokeService {
 				}
 			}
 		} catch (Exception e) {
-			System.out.println("Exception in HutchTriBeatzMainServlet.CASE 11: - " + e.getMessage());
+			e.printStackTrace();			
 			obj = new Root(197, messageSource.getMessage("197", null, new Locale(reqParam.getLanguageCode())));
 		}
 		}
@@ -99,21 +99,32 @@ public class KaraokeServiceImpl implements KaraokeService {
 	@SuppressWarnings("unchecked")
 	@Override
 	public RootResponse getKaraokeArtistFollow(RequestParameter reqParam) {
-		if (reqParam.getEventType().equalsIgnoreCase("1")) {
-			dbProcedures.FOLLOWKARAOKEARTIST(reqParam);
-			obj = new Root(336, messageSource.getMessage("336", null, new Locale(reqParam.getLanguageCode())));
-		} else if (reqParam.getEventType().equalsIgnoreCase("2")) {
-			dbProcedures.FOLLOWKARAOKEARTIST(reqParam);
-			obj = new Root(337, messageSource.getMessage("337", null, new Locale(reqParam.getLanguageCode())));
-		} else if (reqParam.getEventType().equalsIgnoreCase("3") || reqParam.getEventType().equalsIgnoreCase("4")) {
-			String count=dbProcedures.getFollowArtist(reqParam);
-			list = dbProcedures.FOLLOWKARAOKEARTISTLISTING(reqParam);
-			if (list.size() == 0) { 
-				obj = new Root(338, messageSource.getMessage("338", null, new Locale(reqParam.getLanguageCode())));
-			} else {
-				obj = new FollowKaraokeArtist(Integer.parseInt(count.split("#")[0]),Integer.parseInt(count.split("#")[1]),list);
+		
+		
+		try {
+			if (reqParam.getEventType().equalsIgnoreCase("1")) {
+				dbProcedures.FOLLOWKARAOKEARTIST(reqParam);
+				obj = new Root(336, messageSource.getMessage("336", null, new Locale(reqParam.getLanguageCode())));
+			} else if (reqParam.getEventType().equalsIgnoreCase("2")) {
+				dbProcedures.FOLLOWKARAOKEARTIST(reqParam);
+				obj = new Root(337, messageSource.getMessage("337", null, new Locale(reqParam.getLanguageCode())));
+			} else if (reqParam.getEventType().equalsIgnoreCase("3") || reqParam.getEventType().equalsIgnoreCase("4")) {
+				String count=dbProcedures.getFollowArtist(reqParam);
+				list = dbProcedures.FOLLOWKARAOKEARTISTLISTING(reqParam);
+				if (list.size() == 0) { 
+					obj = new Root(338, messageSource.getMessage("338", null, new Locale(reqParam.getLanguageCode())));
+				} else {
+					obj = new FollowKaraokeArtist(Integer.parseInt(count.split("#")[0]),Integer.parseInt(count.split("#")[1]),list);
+				}
 			}
+			
+		} catch (Exception e) {
+			// TODO: handle exception
 		}
+		
+		
+		
+		
 		return new RootResponse(obj);
 	}
 

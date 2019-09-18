@@ -1,7 +1,7 @@
 package com.beans;
 
 import com.app.beans.Images;
-import com.database.MySQL;
+
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -79,24 +79,24 @@ public class RadioBean {
 		this.images = images;
 	}
 
-	@SuppressWarnings("finally")
-	public static List<com.beans.RadioBean> getTopRadio(int countryId, int imageTechRefId) {
-		List<com.beans.RadioBean> lst = new ArrayList<com.beans.RadioBean> ();
-		try {
-			MySQL mysql = new MySQL();
-			ResultSet rs = mysql.prepareCall("{CALL `Mziiki_Content`.`GetRadioMetaData`(1," + countryId
-					+ ",1,0,'NA','NA','NA','NA','NA',0,0," + imageTechRefId + ",0,20)}");
-			while (rs.next()) {
-				lst.add(new RadioBean(rs.getInt("radio_id"), rs.getString("radio_name"), rs.getString("radio_desc"),
-						rs.getString("image_url"), rs.getInt("track_count")));
-			}
-			mysql.close();
-		} catch (Exception e) {
-			System.out.println(
-					"Exception in Mziiki Genre.getTopRadio(int countryId, int imageTechRefId) - " + e.getMessage());
-		} finally {
-			return lst;
-		}
-	}
+//	@SuppressWarnings("finally")
+//	public static List<com.beans.RadioBean> getTopRadio(int countryId, int imageTechRefId) {
+//		List<com.beans.RadioBean> lst = new ArrayList<com.beans.RadioBean> ();
+//		try {
+//			MySQL mysql = new MySQL();
+//			ResultSet rs = mysql.prepareCall("{CALL `Mziiki_Content`.`GetRadioMetaData`(1," + countryId
+//					+ ",1,0,'NA','NA','NA','NA','NA',0,0," + imageTechRefId + ",0,20)}");
+//			while (rs.next()) {
+//				lst.add(new RadioBean(rs.getInt("radio_id"), rs.getString("radio_name"), rs.getString("radio_desc"),
+//						rs.getString("image_url"), rs.getInt("track_count")));
+//			}
+//			mysql.close();
+//		} catch (Exception e) {
+//			System.out.println(
+//					"Exception in Mziiki Genre.getTopRadio(int countryId, int imageTechRefId) - " + e.getMessage());
+//		} finally {
+//			return lst;
+//		}
+//	}
 
 }

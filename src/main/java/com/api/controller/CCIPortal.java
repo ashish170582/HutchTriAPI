@@ -1,13 +1,14 @@
 package com.api.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.services.impl.CCIServiceImpl;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -47,6 +48,7 @@ public class CCIPortal {
 	     	return   cciServiceImpl.getUserUnsubDetails(msisdn);
 	}
 	
+	/*
 	@ApiOperation(value = "getOperatorData", response = Iterable.class)
 	@RequestMapping(value = "/getOperatorData", method = RequestMethod.GET)
 	public @ResponseBody Object getOperatorData(
@@ -54,5 +56,15 @@ public class CCIPortal {
 		
 	     	return   cciServiceImpl.getOperatorData(from,to);
 	}
+	
+	*/
+	@ApiOperation(value = "getDashBoardData", response = Iterable.class)
+	@RequestMapping(value = "/getDashBoardData", method = RequestMethod.GET)
+	public @ResponseBody Object getDashBoardData() {		
+	     	return   cciServiceImpl.getDashBoardData();
+	}
+	
+	
+	
 	
 }

@@ -5,7 +5,7 @@
  */
 package com.app.beans;
 
-import com.database.MySQL;
+
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
@@ -92,22 +92,22 @@ public class Album {
         this.images = images;
     }
   
-
-    @SuppressWarnings("finally")
-	public static List<Album> getTopAlbum(int countryId, int imageTechRefId) {
-        List<Album> lst = new ArrayList<Album>();
-        try {
-            MySQL mysql = new MySQL();
-            ResultSet rs = mysql.prepareCall("{call `Mziiki_Content`.`GetAlbumMetaData`(3," + countryId + ",0,0," + imageTechRefId + ",0,10)}");
-            while (rs.next()) {
-                lst.add(new Album(rs.getInt("album_id"), rs.getString("album_title"), rs.getString("artist_name"), rs.getInt("album_rating"), rs.getInt("album_tracks_count"), rs.getString("image_url")));
-            }
-            mysql.close();
-        } catch (Exception e) {
-            System.out.println("Exception in Mziiki Album.getTopAlbum(int countryId, int imageTechRefId) - " + e.getMessage());
-        } finally {
-            return lst;
-        }
-    }
+//
+//    @SuppressWarnings("finally")
+//	public static List<Album> getTopAlbum(int countryId, int imageTechRefId) {
+//        List<Album> lst = new ArrayList<Album>();
+//        try {
+//            MySQL mysql = new MySQL();
+//            ResultSet rs = mysql.prepareCall("{call `Mziiki_Content`.`GetAlbumMetaData`(3," + countryId + ",0,0," + imageTechRefId + ",0,10)}");
+//            while (rs.next()) {
+//                lst.add(new Album(rs.getInt("album_id"), rs.getString("album_title"), rs.getString("artist_name"), rs.getInt("album_rating"), rs.getInt("album_tracks_count"), rs.getString("image_url")));
+//            }
+//            mysql.close();
+//        } catch (Exception e) {
+//            System.out.println("Exception in Mziiki Album.getTopAlbum(int countryId, int imageTechRefId) - " + e.getMessage());
+//        } finally {
+//            return lst;
+//        }
+//    }
 
 }

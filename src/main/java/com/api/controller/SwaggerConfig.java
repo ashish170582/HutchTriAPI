@@ -27,7 +27,7 @@ public class SwaggerConfig {
                 "",
                 "",
                 "Terms of service",
-                new Contact("Rajat Kumar Garg", "", "rajat.garg@digispice.com"),
+                new Contact("Spice Lab Private Ltd.", "", ""),
                "",
                 "");
         return apiInfo;

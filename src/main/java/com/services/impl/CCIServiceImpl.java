@@ -8,6 +8,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 import com.beans.ContainerItem;
 import com.beans.ContainerItemBean;
+import com.beans.DashBoardData;
 import com.beans.OperatorData;
 import com.app.beans.RootResponse;
 import com.beans.AllItem;
@@ -48,6 +49,10 @@ public class CCIServiceImpl implements CCIServices {
 	public List<OperatorData> getOperatorData(String fromDate, String toDate) {
 		 
 		return    dbProcedures.getOperatorData(fromDate, toDate);
+	}
+	@Override
+	public List<DashBoardData> getDashBoardData() {		 
+		return    dbProcedures.getDashBoardData();
 	}
 
 }

@@ -575,5 +575,39 @@ public class CountryInfoData {
 	public void setCrbtAvailable(int crbtAvailable) {
 		this.crbtAvailable = crbtAvailable;
 	}
+	@Override
+	public String toString() {
+		return "CountryInfoData [countryid=" + countryid + ", countryname=" + countryname + ", dialingcode="
+				+ dialingcode + ", mobnolength=" + mobnolength + ", code2digit=" + code2digit + ", code3digit="
+				+ code3digit + ", languageCode=" + languageCode + ", userdevid=" + userdevid + ", audioAdFirstTime="
+				+ audioAdFirstTime + ", audioAdFrequency=" + audioAdFrequency + ", audioadversion=" + audioadversion
+				+ ", audioadurl=" + audioadurl + ", splashversion=" + splashversion + ", splashurl=" + splashurl
+				+ ", logourl=" + logourl + ", mlogourl=" + mlogourl + ", iosThemeColour=" + iosThemeColour
+				+ ", subscriptionAvailable=" + subscriptionAvailable + ", downloadAvailable=" + downloadAvailable
+				+ ", isDataCacheEnable=" + isDataCacheEnable + ", crbtAvailable=" + crbtAvailable + ", subscriptionUrl="
+				+ subscriptionUrl + ", subLinkOpenAction=" + subLinkOpenAction + ", shareUrl=" + shareUrl
+				+ ", msisdnHeaderUrl=" + msisdnHeaderUrl + ", songOptionsSequence=" + songOptionsSequence
+				+ ", songPreviewDuration=" + songPreviewDuration + ", showStickyIcon=" + showStickyIcon
+				+ ", showLanguageChangePopup=" + showLanguageChangePopup + ", loginRequiredAll=" + loginRequiredAll
+				+ ", loginRequiredShare=" + loginRequiredShare + ", loginRequiredCrbt=" + loginRequiredCrbt
+				+ ", loginRequiredPlayAudio=" + loginRequiredPlayAudio + ", loginRequiredPlayVideo="
+				+ loginRequiredPlayVideo + ", cli=" + cli + ", otpLength=" + otpLength + ", billingPopUpEnabled="
+				+ billingPopUpEnabled + ", promotionalPageEnabled=" + promotionalPageEnabled + ", newLogoUrl="
+				+ newLogoUrl + ", isSocialScreenEnable=" + isSocialScreenEnable + ", loginRequiredDownload="
+				+ loginRequiredDownload + ", loginRequiredOffline=" + loginRequiredOffline + ", loginRequiredFavourite="
+				+ loginRequiredFavourite + ", subscriptionRequiredShare=" + subscriptionRequiredShare
+				+ ", subscriptionRequiredCrbt=" + subscriptionRequiredCrbt + ", subscriptionRequiredPlayAudio="
+				+ subscriptionRequiredPlayAudio + ", subscriptionRequiredPlayVideo=" + subscriptionRequiredPlayVideo
+				+ ", subscriptionRequiredDownload=" + subscriptionRequiredDownload + ", subscriptionRequiredOffline="
+				+ subscriptionRequiredOffline + ", subscriptionRequiredFavourite=" + subscriptionRequiredFavourite
+				+ ", uploadMusicVisibility=" + uploadMusicVisibility + ", likeSongPopup=" + likeSongPopup
+				+ ", offlineDownloadPopup=" + offlineDownloadPopup + ", leftMenuButtonTitle=" + leftMenuButtonTitle
+				+ ", leftMenuButtonTitle_SW=" + leftMenuButtonTitle_SW + ", artistURL=" + artistURL
+				+ ", msisdnHeaderFinalUrl=" + msisdnHeaderFinalUrl + ", optScreenVisibility=" + optScreenVisibility
+				+ ", isPromoCodeScreen=" + isPromoCodeScreen + ", isKaraokeAvailable=" + isKaraokeAvailable
+				+ ", otpPosition=" + otpPosition + "]";
+	}
+	
+	
 
 }
