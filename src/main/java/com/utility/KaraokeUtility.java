@@ -191,6 +191,7 @@ public class KaraokeUtility {
 		byte[] bytes = uploadfile.getBytes();
 		Path path = Paths.get(file);
 		Files.write(path, bytes);
+		System.out.println("file "+ path.toString());
 	}
 
 	@Async
